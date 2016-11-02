@@ -66,5 +66,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/search', 'HomeController@search');
 });
 
+Route::get('/proba', 'AdminController@proba');
+
 
 

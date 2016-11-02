@@ -152,4 +152,8 @@ class AdminController extends Controller
         $hearing->delete();
         return redirect()->back()->with('message', 'Избришавте рочиште');
     }
+
+    public function proba(){
+        var_dump('Proba za void funkcija vo php');
+    }
 }
