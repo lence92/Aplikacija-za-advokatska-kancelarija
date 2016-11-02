@@ -1,0 +1,7 @@
+#logoPozadina{
+    background: #ffffff;
+    background-image:  url("../image/LogoMakr.png");
+    background-size: 270px 60px;
+    background-repeat: no-repeat;
+    background-position: 50% 10%;
+}

@@ -1,0 +1,6 @@
+#pozadina, #pozadina2{
+    background: #ffffff;
+    background-image:  url("../image/profil_pozadina.png");
+    background-repeat: no-repeat;
+    background-position: top right;
+}

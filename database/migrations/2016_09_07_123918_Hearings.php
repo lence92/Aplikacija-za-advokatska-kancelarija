@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class Hearings extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        //
+        Schema::create('hearings', function (Blueprint $table){
+            $table->increments('id');
+            $table->integer('case_id')->unsigned();
+            $table->foreign('case_id')->references('id')->on('cases');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->date('datum');
+            $table->time('od');
+            $table->time('do');
+            $table->string('sudnica');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+        Schema::drop('hearings');
+    }
+}
