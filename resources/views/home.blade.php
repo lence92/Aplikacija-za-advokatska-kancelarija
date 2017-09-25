@@ -25,7 +25,7 @@
         }
 
         #calendar{
-            padding-top: 50px;
+            padding-top: 180px;
             margin-left: 80px;
         }
 
@@ -50,7 +50,7 @@
          body .modal{
              margin-top: 70px;
          }
-        body .modal-dialog{
+        body #modelHome{
             width: 800px;
             text-align: center;
         }
@@ -122,22 +122,36 @@
 
                 <div id="rocistaTabela">
                     <h3><img src="{{ url('image/judge-512.png') }}" width="30" height="30">Закажани рочишта за денес</h3>
-                    <table class="table" style="margin-top: 30px">
-                        @foreach($rocista_denes as $rociste)
-                            @foreach($permiss as $perm)
-                                @if($rociste->broj_na_predmet == $perm->broj_na_predmet)
-                                    <tr>
-                                        <td>{{ $rociste->broj_na_predmet }}</td>
-                                        <?php $date=date_create($rociste->datum); ?>
-                                        <td>{{ date_format($date, "m/d/Y") }}</td>
-                                        <td>{{ $rociste->od }}</td>
-                                        <td>{{ $rociste->do }}</td>
-                                        <td>{{ $rociste->sudnica }}
-                                        </td>
-                                    </tr>
-                                @endif
+                    <table class="table" style="margin-top: 30px;">
+                        @if(Auth::user()->role == 'paralegal')
+                            @foreach($rocista_denes as $rociste)
+                                <tr>
+                                    <td>{{ $rociste->broj_na_predmet }}</td>
+                                    <?php $date=date_create($rociste->datum); ?>
+                                    <td>{{ date_format($date, "m/d/Y") }}</td>
+                                    <td>{{ $rociste->od }}</td>
+                                    <td>{{ $rociste->do }}</td>
+                                    <td>{{ $rociste->sudnica }}
+                                    </td>
+                                </tr>
                             @endforeach
-                        @endforeach
+                        @else
+                            @foreach($rocista_denes as $rociste)
+                                @foreach($permiss as $perm)
+                                    @if($rociste->broj_na_predmet == $perm->broj_na_predmet)
+                                        <tr>
+                                            <td>{{ $rociste->broj_na_predmet }}</td>
+                                            <?php $date=date_create($rociste->datum); ?>
+                                            <td>{{ date_format($date, "m/d/Y") }}</td>
+                                            <td>{{ $rociste->od }}</td>
+                                            <td>{{ $rociste->do }}</td>
+                                            <td>{{ $rociste->sudnica }}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        @endif
                     </table>
                 </div>
             </div>
@@ -146,7 +160,7 @@
                 <div id="calendar" onchange="funk()"></div>
 
                 <div id="triDoc">
-                    <h3 style="text-align: center">Последните три објавени документи:</h3>
+                    <h3 style="text-align: center">Последните објавени документи:</h3>
                     <div style="margin-top: 30px;">
                         <ol>
                             @foreach($tri_doc as $doc)
@@ -158,7 +172,7 @@
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="{{$doc->id}}" role="dialog">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog" id="modelHome">
 
                                             <!-- Modal content-->
                                             <div class="modal-content">
@@ -209,6 +223,8 @@
             </div>
         </div>
     </div>
+
+
 
 
     <script type="text/javascript">

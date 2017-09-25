@@ -29,11 +29,6 @@ class User extends Authenticatable implements CanResetPasswordContract
         'password', 'remember_token',
     ];
 
-    public function todolista()
-    {
-        return $this->hasMany('App\ToDoLista','user_id');
-    }
-
     public function permissions()
     {
         return $this->hasMany('App\Permissions','user_id');

@@ -12,7 +12,7 @@
         body .modal{
             margin-top: 70px;
         }
-        body .modal-dialog{
+        body #modelCase{
             width: 800px;
             text-align: center;
         }
@@ -61,7 +61,7 @@
 
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="{{$doc->id}}" role="dialog">
-                                                        <div class="modal-dialog">
+                                                        <div class="modal-dialog" id="modelCase">
 
                                                             <!-- Modal content-->
                                                             <div class="modal-content">

@@ -18,6 +18,9 @@ use Validator;
 use Auth;
 use Hash;
 use Response;
+use Log;
+use \Facebook\Exceptions\FacebookResponseException;
+use \Facebook\Exceptions\FacebookSDKException;
 
 class HomeController extends Controller
 {
@@ -40,8 +43,11 @@ class HomeController extends Controller
     {
 
         $tri_doc = Documents::join('users', 'users.id', '=', 'documents.user_id')->select('documents.*', 'users.name')->orderBy('created_at', 'desc')->take(3)->get();
-
-        $rocista_denes = Hearings::where('datum', date('Y-m-d'))->join('cases', 'hearings.case_id', '=','cases.id')->select('hearings.*', 'cases.broj_na_predmet')->get();
+        if(Auth::user()->role == 'paralegal'){
+            $rocista_denes = Hearings::where('datum', date('Y-m-d'))->get();
+        }else{
+            $rocista_denes = Hearings::where('datum', date('Y-m-d'))->join('cases', 'hearings.case_id', '=','cases.id')->select('hearings.*', 'cases.broj_na_predmet')->get();
+        }
         $permiss = Permissions::where('user_id', Auth::user()->id)->get();
 
         if(!empty($date)){
@@ -209,21 +215,6 @@ class HomeController extends Controller
 
 
 
-    public function search(Request $request){
-
-        $validation = Validator::make($request->all(), [
-            'search' => 'required'
-        ]);
-
-        // Check if it fails //
-        if( $validation->fails() ){
-            return redirect()->back()->withInput()
-                ->with('errors', $validation->errors() );
-        }
-
-
-    }
-
     public function siteMoiDokumenti(){
 
         $docs = Documents::where('user_id', Auth::user()->id)->get();
@@ -276,5 +267,66 @@ class HomeController extends Controller
         $doc->save();
 
         return redirect('/moiDok')->with('message', 'Додадовте нов документ во предметот '.$request->get('predmet'));
+    }
+
+    public function search(Request $request){
+
+        $this->validate($request, [
+            'search' => 'required'
+        ]);
+
+        $search = $request->get('search');
+
+        $vraboteni = User::where('name', 'like', '%'.$search.'%')->get();
+        $dokumenti = Documents::where('file', 'like', 'image/%'.$search.'%')->get();
+        $predmeti = Cases::where('broj_na_predmet', 'like', '%'.$search.'%')->get();
+        //$rochishta = Hearings::all();
+
+        $data = array(
+            'vraboteni' => $vraboteni,
+            'dokumenti' => $dokumenti,
+            'predmeti' => $predmeti
+        );
+
+        return redirect()->back()->with('data', $data)->with('search', $search);
+
+    }
+
+    public function shareOnFB(){
+        Log::info('Graph returned an error: ');
+
+
+        $fb = new \Facebook\Facebook([
+            'app_id' => '{1241530432585164}',
+            'app_secret' => '{d5ca8e6205542b7a630351187c8a7755}',
+            'default_graph_version' => 'v2.9',
+            //'default_access_token' => '{access-token}', // optional
+        ]);
+
+
+        // Use one of the helper classes to get a Facebook\Authentication\AccessToken entity.
+        //   $helper = $fb->getRedirectLoginHelper();
+        //   $helper = $fb->getJavaScriptHelper();
+        //   $helper = $fb->getCanvasHelper();
+        //   $helper = $fb->getPageTabHelper();
+
+        try {
+            // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+            // If you provided a 'default_access_token', the '{access-token}' is optional.
+            $response = $fb->get('/me', '{1241530432585164|QvuqoO028bm1BPNL3IeO4h7qLx4}');
+        } catch(FacebookResponseException $e) {
+            // When Graph returns an error
+            Log::info('Graph returned an error: ' . $e->getMessage());
+            exit;
+        } catch(FacebookSDKException $e) {
+            // When validation fails or other local issues
+            Log::info('Facebook SDK returned an error: ' . $e->getMessage());
+            exit;
+        }
+
+        $me = $response->getGraphUser();
+        $data = $me->getName();
+
+        return redirect()->back()->with('username', $data);
     }
 }

@@ -24,7 +24,7 @@
         body .modal{
             margin-top: 70px;
         }
-        body .modal-dialog{
+        body #modelDok{
             width: 800px;
             text-align: center;
         }
@@ -62,7 +62,7 @@
 
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="{{$doc->id}}" role="dialog">
-                                                        <div class="modal-dialog">
+                                                        <div class="modal-dialog" id="modelDok">
 
                                                             <!-- Modal content-->
                                                             <div class="modal-content">
@@ -107,29 +107,6 @@
 
                                 @endif
                             @endforeach
-                                            {{--<td>--}}
-                                                {{--<div id="privilegii">--}}
-                                                    {{--@foreach($users as $user)--}}
-                                                        {{--@if($permiss->count() > 0)--}}
-                                                            {{--@foreach($permiss as $perm)--}}
-                                                                {{--@if($perm->doc_id == $doc->id && $perm->user_id == $user->id)--}}
-                                                                    {{--<input type="checkbox" id="{{ $user->id . $doc->id }}" checked onchange="privilegii('{{ $user->id }}', '{{ $doc->id }}')">--}}
-                                                                    {{--<label for="{{ $user->id . $doc->id }}">{{ $user->name }}</label>--}}
-                                                                    {{--<br/>--}}
-                                                                {{--@else--}}
-                                                                    {{--<input type="checkbox" id="{{ $user->id . $doc->id }}" onchange="privilegii('{{ $user->id }}', '{{ $doc->id }}')">--}}
-                                                                    {{--<label for="{{ $user->id . $doc->id }}">{{ $user->name }}</label>--}}
-                                                                    {{--<br/>--}}
-                                                                {{--@endif--}}
-                                                            {{--@endforeach--}}
-                                                        {{--@else--}}
-                                                            {{--<input type="checkbox" id="{{ $user->id . $doc->id }}" onchange="privilegii('{{ $user->id }}', '{{ $doc->id }}')">--}}
-                                                            {{--<label for="{{ $user->id . $doc->id }}">{{ $user->name }}</label>--}}
-                                                            {{--<br/>--}}
-                                                        {{--@endif--}}
-                                                    {{--@endforeach--}}
-                                                {{--</div>--}}
-                                            {{--</td>--}}
                                         </tr>
                         @endforeach
 
@@ -139,6 +116,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         function privilegii(id, $doc) {

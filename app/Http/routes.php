@@ -15,6 +15,7 @@ Route::get('/', function (){
     return redirect('/home/'.date('Y-m-d'));
 });
 
+
 Route::auth();
 
 Route::get('/home/{date?}', 'HomeController@index');
@@ -64,6 +65,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/deleteHearing/{id}', 'AdminController@deleteHearing');
 
     Route::post('/search', 'HomeController@search');
+
+    Route::get('/shareOnFB', 'HomeController@shareOnFB');
 });
 
 

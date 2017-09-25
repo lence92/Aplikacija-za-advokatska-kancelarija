@@ -428,7 +428,6 @@
         </div>
     @endif
 
-
 <script>
 
     @if(!empty(Session::get('allCases')))
